@@ -1,0 +1,132 @@
+/*App.css*/
+/* Base styles */
+.App {
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-image: url('./light-background.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: auto-fit;
+  color: black; /* Default text color for light mode */
+  transition: background-image 0.5s ease, color 0.5s ease; /* Add transition */
+}
+
+/* Light mode variables */
+:root {
+  --header-background-color: mimicry; /* Light semi-transparent */
+  --header-text-color: rgba(0, 0, 0, 0.8);
+  --footer-background-color:mimicry; /* Light semi-transparent */
+  --footer-text-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Dark mode variables */
+.dark-mode {
+  --header-background-color: mimicry; /* Dark semi-transparent */
+  --header-text-color: rgba(255, 255, 255, 0.8);
+  --footer-background-color: mimicry; /* Dark semi-transparent */
+  --footer-text-color: rgba(255, 255, 255, 0.8);
+}
+
+.dark-mode .App {
+  background-image: url('./dark-background.jpg');
+  color: white; /* Text color for dark mode */
+}
+
+/* Dark mode toggle button styles */
+.dark-mode-toggle {
+  margin-left: auto;
+  background-color: #ddd;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.5s ease, color 0.5s ease; /* Add transition */
+}
+
+.dark-mode .dark-mode-toggle {
+  background-color: #333;
+  color: white;
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% {
+    color: red;
+  }
+  25% {
+    color: blue;
+  }
+  50% {
+    color: green;
+  }
+  75% {
+    color: orange;
+  }
+  100% {
+    color: red;
+  }
+}
+
+.shimmer {
+  font-weight: bold;
+  animation: shimmer 3s infinite;
+}
+
+/* Additional text color changes for dark and light modes */
+.light-mode-text {
+  color: black; /* Text color for light mode */
+}
+
+.dark-mode .light-mode-text {
+  color: white; /* Text color for dark mode */
+}
+/* Header styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--header-background-color);
+  color: var(--header-text-color);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px); /* Censored effect */
+  transition: background-color 0.5s ease, color 0.5s ease; /* Add transition */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.user-email {
+  font-size: 1.2em;
+}
+
+/* Footer styles */
+.footer {
+  background-color: var(--footer-background-color);
+  color: var(--footer-text-color);
+  padding: 10px;
+  text-align: center;
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px); /* Censored effect */
+  transition: background-color 0.5s ease, color 0.5s ease; /* Add transition */
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.footer p {
+  margin: 0;
+}
