@@ -1,5 +1,0 @@
-//not completed
-
-
-//install dotenv (.env) to allow us to hide our apikey in .env file 
-npm i --save-dev dotenv
