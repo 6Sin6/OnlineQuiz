@@ -1,14 +1,35 @@
-//import { h } from 'preact';
+
+//file name : Login.jsx
 import { signInWithGoogle } from '/src/auth';
 import { route } from 'preact-router';
+import { useGlobal } from '/src/context/GlobalContext';
+import { useState, useEffect } from 'preact/hooks';
 
-const Login = () => {
+
+
+const Login = ({profilePhoto}) => {
+  const { state, setState } = useGlobal();
+
+  useEffect(() => {
+    // Check if the user is logged in and redirect if so
+    if (state.GlobalVarIsLoggedIn) {
+      route('/welcome');
+    }
+  }, [state.GlobalVarIsLoggedIn]);
+
   const handleSignIn = async () => {
     try {
       const result = await signInWithGoogle();
-      console.log(result.email)
-      window.UserName=result.email
       window.LOGEDIN=true
+      //update the global varible in the globalcontext.jsx to the new values 
+      setState(prevState => ({
+        ...prevState,
+        GlobalVarIsLoggedIn:true,
+        GlobalVarUserEmail:result.email,
+        GlobalVarprofilePhotoUrl: result.photoURL
+      }));
+    
+     
       route('/welcome'); // Redirect to the welcome page after sign-in
     } catch (error) {
       console.error("Sign-in failed", error);

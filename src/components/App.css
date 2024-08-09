@@ -1,15 +1,26 @@
 /*App.css*/
 /* Base styles */
+body {
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevent scrolling */
+}
+
 .App {
   text-align: center;
   background-size: cover;
   background-position: center;
   background-image: url('./light-background.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: auto-fit;
+
   color: black; /* Default text color for light mode */
   transition: background-image 0.5s ease, color 0.5s ease; /* Add transition */
+  
+  max-width: 100vw; /* Prevent overflow */
+  max-height: 100vh; /* Prevent overflow */
+  overflow: auto; /* Enable scrolling if needed */
 }
 
 /* Light mode variables */
@@ -93,6 +104,7 @@
   z-index: 1000;
   backdrop-filter: blur(10px); /* Censored effect */
   transition: background-color 0.5s ease, color 0.5s ease; /* Add transition */
+  width: 100%;
 }
 
 .header-content {
@@ -110,8 +122,10 @@
 .footer {
   background-color: var(--footer-background-color);
   color: var(--footer-text-color);
+  margin-top: 30%;
   padding: 10px;
   text-align: center;
+  font-size: xx-small;
   position: sticky;
   bottom: 0;
   z-index: 1000;
@@ -129,4 +143,11 @@
 
 .footer p {
   margin: 0;
+}
+
+.shared-button {
+  font-weight: bold;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.5s ease;
 }

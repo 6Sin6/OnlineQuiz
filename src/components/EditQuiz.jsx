@@ -1,12 +1,20 @@
 //import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState,useEffect } from 'preact/hooks';
+import { useGlobal } from '/src/context/GlobalContext'; 
 import { route } from 'preact-router';
 import { ref, onValue, remove } from 'firebase/database';
 import { database } from '../firebase'; // Import database from firebase.js
 
 const EditQuiz = () => {
   const [quizzes, setQuizzes] = useState([]);
-
+  const { state } = useGlobal(); // Access global state (global varibles can be set in /src/context/GlobalContext.jsx)
+  useEffect(() => {
+    // Check if the user is Not logged in and redirect if so 
+    if (!state.GlobalVarIsLoggedIn) {
+      route('/');
+    }
+  }, [state.GlobalVarIsLoggedIn]);
+  
   useEffect(() => {
     const fetchQuizzes = () => {
       const quizzesRef = ref(database, 'quizzes');
@@ -28,6 +36,8 @@ const EditQuiz = () => {
   };
 
   const handleDelete = async (id) => {
+  const confirmDelete = window.confirm("Are you sure you want to delete this quiz?");
+  if (confirmDelete) {
     try {
       const quizRef = ref(database, `quizzes/${id}`);
       await remove(quizRef);
@@ -35,10 +45,14 @@ const EditQuiz = () => {
     } catch (error) {
       console.error('Failed to delete quiz:', error);
     }
+  } else {
+    console.log('Quiz deletion canceled');
+  }
   };
+  
 
-  const handleEdit = (id) => {
-    route(`/change-quiz/${id}`);
+  const handleEdit = (quizId) => {
+    route(`/change-quiz/${quizId}`);
   };
 
   return (
