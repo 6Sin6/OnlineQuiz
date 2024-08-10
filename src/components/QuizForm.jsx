@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'preact/hooks';
-import { useGlobal } from '/src/context/GlobalContext'; 
+import { useGlobal } from '/src/context/GlobalContext';
 import { route } from 'preact-router';
 import { ref, push, set } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database } from '../firebase';
 
 const QuizForm = ({ quizzes, setQuizzes }) => {
   const [quizTitle, setQuizTitle] = useState('');
   const [quizDescription, setQuizDescription] = useState('');
   const [questions, setQuestions] = useState([]);
-  const [image, setImage] = useState(null);
-  const { state } = useGlobal(); 
+  const [showModal, setShowModal] = useState({ visible: false, message: '', type: '' });
+  const { state } = useGlobal();
 
   useEffect(() => {
     if (!state.GlobalVarIsLoggedIn) {
@@ -18,25 +17,23 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
     }
   }, [state.GlobalVarIsLoggedIn]);
 
-  // fill the form fields with existing quiz data when editing
   useEffect(() => {
     if (quizzes) {
       setQuizTitle(quizzes.title || '');
       setQuizDescription(quizzes.description || '');
-      if(quizzes.questions)
-      setQuestions(quizzes.questions.map((question) => ({
-        text: question.text,
-        options: question.options,
-        correctOptionIndex: question.correctOption, // Map this correctly
-      })) || []);
-      setImage(quizzes.image || null);
-      document.getElementById("titleQuizForm").style="hidden"
+      setQuestions(
+        (quizzes.questions || []).map((question) => ({
+          text: question.text,
+          options: question.options,
+          correctOptionIndex: question.correctOption, // Map this correctly
+        }))
+      );
+      document.getElementById("titleQuizForm").style = "hidden";
     }
   }, [quizzes]);
 
-
   const handleBackClick = () => {
-    route('/welcome');
+    setShowModal({ visible: true, message: 'You have unsaved changes. Are you sure you want to go back?', type: 'confirm' });
   };
 
   const addQuestion = () => {
@@ -46,12 +43,6 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
   const removeQuestion = (index) => {
     const updatedQuestions = questions.filter((_, qIndex) => qIndex !== index);
     setQuestions(updatedQuestions);
-  };
-
-  const handleImageChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
   };
 
   const saveQuiz = async (e) => {
@@ -70,23 +61,22 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
       const quizzesRef = ref(database, 'quizzes');
       const newQuizRef = push(quizzesRef);
 
-      if (image) {
-        const storage = getStorage();
-        const imageRef = storageRef(storage, `quiz-images/${newQuizRef.key}`);
-        await uploadBytes(imageRef, image);
-        const imageURL = await getDownloadURL(imageRef);
-        newQuiz.image = imageURL;
-      }
-
       await set(newQuizRef, newQuiz);
       setQuizzes([...quizzes, { ...newQuiz, id: newQuizRef.key }]);
-      alert("New Quiz added to database");
-      route('/welcome');
+      setShowModal({ visible: true, message: 'Quiz saved successfully!', type: 'success' });
     } catch (error) {
-      alert("Failed to save");
+      setShowModal({ visible: true, message: 'Failed to save quiz. Please try again.', type: 'error' });
       console.error('Save quiz failed:', error);
     }
   };
+
+  const handleModalConfirm = () => {
+    if (showModal.type === 'confirm' || showModal.type === 'success') {
+      route('/welcome');
+    }
+    setShowModal({ visible: false, message: '', type: '' });
+  };
+  
 
   return (
     <div className="flex flex-col items-center justify-center text-center mb-20">
@@ -117,22 +107,13 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
             onChange={(e) => setQuizDescription(e.target.value)}
           ></textarea>
         </div>
-        <div className="mb-4 w-1/2">
-          <label className="block text-center font-bold mb-4" htmlFor="quiz-image">
-            Quiz Image
-          </label>
-          <input
-            className="bg-blue-200 text-black shadow appearance-none border border-black rounded w-full py-4 h-10 px-3 leading-tight focus:outline-none focus:shadow-outline"
-            id="quiz-image"
-            type="file"
-            onChange={handleImageChange}
-          />
-        </div>
         <div id="questions-list" className="mb-4 w-1/2">
           {questions.map((question, index) => (
-            <div key={index} className="mb-4 bg-gray-200 p-4 rounded shadow">
-              <label onClick={() => removeQuestion(index)} 
-              className="block text-right text-red-500 hover:text-red-700 font-bold mb-200 ml-500"> Cancel 
+            <div key={index} className="mb-4 bg-blue-200 p-4 border border-black rounded shadow">
+              <label 
+                onClick={() => removeQuestion(index)} 
+                className="block text-right text-red-500 hover:text-red-700 font-bold mb-2 ml-2">
+                Cancel
               </label>
               
               <label className="block text-gray-700 text-center font-bold mb-2">Question {index + 1}</label>
@@ -194,6 +175,7 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
             Save Quiz
           </button>
           <button
+            type="button"
             onClick={handleBackClick}
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg"
           >
@@ -201,6 +183,44 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
           </button>
         </div>
       </form>
+
+      {/* Modal for displaying messages */}
+      {showModal.visible && (
+  <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg text-black shadow-lg">
+      <h2 className="text-xl font-bold mb-4">{showModal.type === 'confirm' ? 'Are you sure?' : 'Success'}</h2>
+      <p className="mb-4">{showModal.message}</p>
+      <div className="flex justify-between">
+        {showModal.type === 'confirm' ? (
+          <>
+            <button
+              onClick={() => setShowModal({ visible: false, message: '', type: '' })}
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleModalConfirm}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Yes, Go Back
+            </button>
+          </>
+        ) : (
+          <div className="flex justify-center w-full">
+            <button
+              onClick={handleModalConfirm}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+            >
+              OK
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
