@@ -2,13 +2,22 @@
 //import { h } from 'preact';
 
 import { route } from 'preact-router';
-import { useState,useEffect } from 'preact/hooks';
+import { useState,useEffect,useRef } from 'preact/hooks';
 import { useGlobal } from '/src/context/GlobalContext'; // Import useGlobal hook (used for global varibles) //like storing profile pic url 
 
 
 
+
 const QuizMenu = () => {
+  const topRef = useRef(null);
   const { state,setState } = useGlobal(); // Access global state (global varibles can be set in /src/context/GlobalContext.jsx)
+
+  useEffect(() => {
+    if (topRef.current) {
+      console.log('Scrolling to top using ref');
+      topRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   useEffect(() => {
     // Check if the user is Not logged in and redirect if so 
@@ -44,7 +53,7 @@ const QuizMenu = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div ref={topRef} className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-5xl mb-10 shimmer">Welcome to the Online Quiz</h1>
       <div className="grid grid-cols-2 grid-rows-2 gap-5">
         <button

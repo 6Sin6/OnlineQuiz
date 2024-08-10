@@ -5,6 +5,8 @@ import { ref, onValue } from 'firebase/database';
 import { database } from '../firebase';
 import QuizForm from './QuizForm'; // Import QuizForm
 
+
+
 const ChangeQuiz = ({ quizId }) => {
   const { state } = useGlobal();
   const [quiz, setQuiz] = useState(null);
@@ -36,7 +38,7 @@ const ChangeQuiz = ({ quizId }) => {
   return (
     <div>
       <h2>Edit Quiz</h2>
-      <QuizForm quizzes={quiz} setQuizzes={setQuiz} />
+      <QuizForm  quizId={quizId} quizzes={quiz} setQuizzes={setQuiz}  />
     </div>
   );
 };

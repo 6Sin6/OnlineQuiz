@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'preact/hooks';
 import { useGlobal } from '/src/context/GlobalContext';
 import { route } from 'preact-router';
-import { ref, push, set } from 'firebase/database';
+import { ref, push, set,remove } from 'firebase/database';
 import { database } from '../firebase';
 
-const QuizForm = ({ quizzes, setQuizzes }) => {
+const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
   const [quizTitle, setQuizTitle] = useState('');
   const [quizDescription, setQuizDescription] = useState('');
   const [questions, setQuestions] = useState([]);
-  const [showModal, setShowModal] = useState({ visible: false, message: '', type: '' });
+  const [showModal, setShowModal] = useState({ visible: false,title: '', message: '', type: '' });
   const { state } = useGlobal();
 
   useEffect(() => {
@@ -47,6 +47,18 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
 
   const saveQuiz = async (e) => {
     e.preventDefault();
+  
+    // Validation check for empty title, description, or no questions
+    if (!quizTitle || !quizDescription || questions.length === 0) {
+      setShowModal({
+        title: 'Empty cells',
+        visible: true,
+        message: 'Please provide a title, description, and at least one question before saving the quiz.',
+        type: 'error'
+      });
+      return;
+    }
+  
     const newQuiz = {
       title: quizTitle,
       description: quizDescription,
@@ -56,28 +68,49 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
         correctOption: question.correctOptionIndex, // Ensure correctOptionIndex is mapped correctly
       })),
     };
-
+  
     try {
+      if (quizzes.id) {
+        // Delete existing quiz before updating
+        const quizRef = ref(database, `quizzes/${quizzes.id}`);
+        await remove(quizRef); // Ensure this completes before adding new quiz
+      }
+  
+      // Add new quiz
       const quizzesRef = ref(database, 'quizzes');
       const newQuizRef = push(quizzesRef);
-
       await set(newQuizRef, newQuiz);
-      setQuizzes([...quizzes, { ...newQuiz, id: newQuizRef.key }]);
-      setShowModal({ visible: true, message: 'Quiz saved successfully!', type: 'success' });
+  
+      setQuizzes((prevQuizzes) => {
+        // Ensure prevQuizzes is an array
+        const updatedQuizzes = Array.isArray(prevQuizzes) ? prevQuizzes : [];
+        
+        return quizzes.id
+          ? updatedQuizzes.map((quiz) => (quiz.id === quizzes.id ? { ...newQuiz, id: newQuizRef.key } : quiz))
+          : [...updatedQuizzes, { ...newQuiz, id: newQuizRef.key }];
+      });
+  
+      setShowModal({ title:'Success' ,visible: true, message: 'Quiz saved successfully!', type: 'success' });
+      
     } catch (error) {
-      setShowModal({ visible: true, message: 'Failed to save quiz. Please try again.', type: 'error' });
+      setShowModal({
+        title: 'Fail',
+        visible: true,
+        message: 'Failed to save quiz. Please try again.',
+        type: 'error'
+      });
       console.error('Save quiz failed:', error);
     }
   };
+  
 
   const handleModalConfirm = () => {
     if (showModal.type === 'confirm' || showModal.type === 'success') {
-      route('/welcome');
+      route('/welcome'); // Change this path to the one you want to redirect to
     }
     setShowModal({ visible: false, message: '', type: '' });
   };
   
-
   return (
     <div className="flex flex-col items-center justify-center text-center mb-20">
       <h2 id="titleQuizForm" className="text-5xl mb-5 shimmer">Create a New Quiz</h2>
@@ -186,41 +219,40 @@ const QuizForm = ({ quizzes, setQuizzes }) => {
 
       {/* Modal for displaying messages */}
       {showModal.visible && (
-  <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-    <div className="bg-white p-6 rounded-lg text-black shadow-lg">
-      <h2 className="text-xl font-bold mb-4">{showModal.type === 'confirm' ? 'Are you sure?' : 'Success'}</h2>
-      <p className="mb-4">{showModal.message}</p>
-      <div className="flex justify-between">
-        {showModal.type === 'confirm' ? (
-          <>
-            <button
-              onClick={() => setShowModal({ visible: false, message: '', type: '' })}
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleModalConfirm}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Yes, Go Back
-            </button>
-          </>
-        ) : (
-          <div className="flex justify-center w-full">
-            <button
-              onClick={handleModalConfirm}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-            >
-              OK
-            </button>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg text-black shadow-lg">
+            <h2 className="text-xl font-bold mb-4">{showModal.type === 'confirm' ? 'Are you sure?' : showModal.title}</h2>
+            <p className="mb-4">{showModal.message}</p>
+            <div className="flex justify-between">
+              {showModal.type === 'confirm' ? (
+                <>
+                  <button
+                    onClick={() => setShowModal({ visible: false, message: '', type: '' })}
+                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleModalConfirm}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Yes, Go Back
+                  </button>
+                </>
+              ) : (
+                <div className="flex justify-center w-full">
+                  <button
+                    onClick={handleModalConfirm}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                  >
+                    OK
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-    </div>
-  </div>
-)}
-
+        </div>
+      )}
     </div>
   );
 };
