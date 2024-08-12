@@ -113,7 +113,7 @@ const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
   
   return (
     <div className="flex flex-col items-center justify-center text-center mb-20">
-      <h2 id="titleQuizForm" className="text-5xl mb-5 shimmer">Create a New Quiz</h2>
+     <h2 className="text-5xl mb-5 shimmer"> Quiz Creation</h2>
       <form onSubmit={saveQuiz} className="flex flex-col items-center w-full">
         <div className="mb-4 w-1/2">
           <label className="block text-center font-bold mb-4" htmlFor="quiz-title">
