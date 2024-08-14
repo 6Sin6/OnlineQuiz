@@ -1,15 +1,15 @@
-import { render } from 'preact'
-import App from './components/App';
-import './index.css'
-import { GlobalProvider } from './context/GlobalContext';
+// main.jsx - Entry point for the Preact application
 
-//Global Varible saved in Window only
-window.LOGEDIN=false
-window.profilePicUrl="https://th.bing.com/th/id/OIP.PRyT3WbMgUpQFp8uD_qudQAAAA?rs=1&pid=ImgDetMain"
+import { render } from 'preact';
+import App from './components/App'; // Import the main App component from app.jsx
+import './index.css'; // Import global CSS styles (Tailwind styles)
+import { GlobalProvider } from './context/GlobalContext'; // Import the context provider used for global varibles
 
+
+// Render the App component inside the GlobalProvider context
 render(
-    <GlobalProvider>
-      <App />
-    </GlobalProvider>,
-    document.getElementById('app')
-  );
+  <GlobalProvider>
+    <App />
+  </GlobalProvider>,
+  document.getElementById('app') // The root element where the app will be mounted
+);

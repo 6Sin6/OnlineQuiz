@@ -1,11 +1,12 @@
-// firebase.js
+// firebase.js - Configures and initializes Firebase services
+
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-// Firebase configuration
+
+// Firebase configuration object containing the project's settings
 const firebaseConfig = {
-  
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "fallbackApiKey",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "fallbackAuthDomain",
   databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://fallback.firebaseio.com",
@@ -16,14 +17,15 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "fallbackMeasurementId"
 };
 
-
-// Initialize Firebase if it hasn't been initialized yet
+// Initialize Firebase application
+// Check if Firebase has already been initialized to prevent duplicate initialization
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const database = getDatabase(app);
-const auth = getAuth(app);
-const storage = getStorage(app);
 
-let userEmail = ""; // Variable to store the user's email
+// Retrieve and export Firebase services
+const database = getDatabase(app); // Access the Firebase Realtime Database
+const auth = getAuth(app); // Access Firebase Authentication
+const storage = getStorage(app); // Access Firebase Cloud Storage
 
 
-export { app, database, auth, storage, userEmail };
+// Export the initialized Firebase app and services
+export { app, database, auth, storage };
