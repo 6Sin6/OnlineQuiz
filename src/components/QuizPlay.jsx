@@ -157,7 +157,7 @@ const QuizPlay = ({ quizId }) => {
       {/* Custom Modal for Results */}
       {showModal && (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-blue-50 rounded-lg p-6 w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto">
+          <div className="bg-blue-50 m-10 rounded-lg p-6 w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto">
             <h3 className="text-2xl font-bold text-center mb-4 text-black">Results</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full bg-blue-50 border border-black">
