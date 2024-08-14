@@ -39,7 +39,7 @@ const QuizMenu = () => {
   };
 
   const logOut =  () =>{
-    //remove the picture after logout  
+    //Remove the picture after logout  
     setState(prevState => ({
       ...prevState,
       GlobalVarIsLoggedIn:false,
@@ -57,25 +57,25 @@ const QuizMenu = () => {
       <h1 className="text-5xl mb-10 shimmer">Welcome to the Online Quiz</h1>
       <div className="grid grid-cols-2 grid-rows-2 gap-5">
         <button
-          onClick={handlePlayClick}
+          onClick={handlePlayClick}//Redirect to the main page
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-6 px-10 rounded-xl shadow-lg transition duration-500"
         >
           Play Quizzes
         </button>
         <button
-          onClick={handleCreateClick}
+          onClick={handleCreateClick}//Redirect to the create page
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-6 px-10 rounded-xl shadow-lg transition duration-500"
         >
           Create Quiz
         </button>
         <button
-          onClick={handleEditClick}
+          onClick={handleEditClick}//Redirect to the edit page
           className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-6 px-10 rounded-xl shadow-lg transition duration-500"
         >
           Edit Quiz
         </button>
         <button
-          onClick={logOut}
+          onClick={logOut}//Logout
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-6 px-10 rounded-xl shadow-lg transition duration-500"
         >
           Log Out
@@ -86,4 +86,3 @@ const QuizMenu = () => {
 };
 
 export default QuizMenu;
-

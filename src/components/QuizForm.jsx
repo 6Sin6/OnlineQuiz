@@ -4,6 +4,7 @@ import { route } from 'preact-router';
 import { ref, push, set,remove } from 'firebase/database';
 import { database } from '../firebase';
 
+// Main QuizForm Component
 const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
   const [quizTitle, setQuizTitle] = useState('');
   const [quizDescription, setQuizDescription] = useState('');
@@ -11,12 +12,15 @@ const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
   const [showModal, setShowModal] = useState({ visible: false,title: '', message: '', type: '' });
   const { state } = useGlobal();
 
+
+   // Effect to redirect to the home page if the user is not logged in
   useEffect(() => {
     if (!state.GlobalVarIsLoggedIn) {
       route('/');
     }
   }, [state.GlobalVarIsLoggedIn]);
 
+  // Effect to initialize the form with existing quiz data if editing
   useEffect(() => {
     if (quizzes) {
       setQuizTitle(quizzes.title || '');
@@ -32,19 +36,24 @@ const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
     }
   }, [quizzes]);
 
+
+  // Function to handle the back button click, showing a confirmation modal
   const handleBackClick = () => {
     setShowModal({ visible: true, message: 'You have unsaved changes. Are you sure you want to go back?', type: 'confirm' });
   };
 
+   // Function to add a new empty question to the list
   const addQuestion = () => {
     setQuestions([...questions, { text: '', answer: '', options: ['', '', '', ''], correctOptionIndex: null }]);
   };
 
+  // Function to remove a question from the list
   const removeQuestion = (index) => {
     const updatedQuestions = questions.filter((_, qIndex) => qIndex !== index);
     setQuestions(updatedQuestions);
   };
 
+  // Function to handle quiz saving, including validation and Firebase interaction
   const saveQuiz = async (e) => {
     e.preventDefault();
   
@@ -216,6 +225,9 @@ const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
           </button>
         </div>
       </form>
+
+
+    
 
       {/* Modal for displaying messages */}
       {showModal.visible && (
