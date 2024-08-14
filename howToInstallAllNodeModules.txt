@@ -1,5 +1,0 @@
-//not completed
-
-
-// canvas-confetti imported by QuizPlay.Jsx
-npm install canvas-confetti
