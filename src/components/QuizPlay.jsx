@@ -145,43 +145,44 @@ const QuizPlay = ({ quizId }) => {
 
       {/* Custom Modal for Results */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-blue-50 rounded-lg p-6 w-11/12 md:w-3/4 lg:w-1/2">
-            <h3 className="text-2xl font-bold text-center mb-4 text-black">Results</h3>
-            <table className="min-w-full bg-blue-50 border border-black">
-              <thead>
-                <tr>
-                  <th className="py-2 border border-black text-center font-bold text-black">Question</th>
-                  <th className="py-2 border border-black text-center font-bold text-black">Correct Answer</th>
-                  <th className="py-2 border border-black text-center font-bold text-black">Your Answer</th>
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((result, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="py-4 border text-left border-black text-black">{result.question}</td>
-                    <td className="py-4 border border-black text-black">{result.correctAnswer}</td>
-                    <td className={`py-4 border border-black font-bold text-black ${result.isCorrect ? 'text-green-500' : 'text-red-500'}`}>
-                      {result.userAnswer} {/* Display the actual answer text */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="mt-4">
-              <p className="text-lg font-bold text-black">Your Score: {score}/{quiz.questions.length}</p>
-              <button 
-                onClick={closeModal}
-                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-500 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}
-              >
-                Thank You!
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-blue-50 rounded-lg p-6 w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto">
+      <h3 className="text-2xl font-bold text-center mb-4 text-black">Results</h3>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-blue-50 border border-black">
+          <thead>
+            <tr>
+              <th className="py-2 border border-black text-center font-bold text-black">Question</th>
+              <th className="py-2 border border-black text-center font-bold text-black">Correct Answer</th>
+              <th className="py-2 border border-black text-center font-bold text-black">Your Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {results.map((result, index) => (
+              <tr key={index} className="border-b">
+                <td className="py-4 border text-left border-black text-black">{result.question}</td>
+                <td className="py-4 border border-black text-black">{result.correctAnswer}</td>
+                <td className={`py-4 border border-black font-bold text-black ${result.isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                  {result.userAnswer} {/* Display the actual answer text */}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-4">
+        <p className="text-lg font-bold text-black">Your Score: {score}/{quiz.questions.length}</p>
+        <button 
+          onClick={closeModal}
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-500 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}
+        >
+          Thank You!
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
-};
-
+}
 export default QuizPlay;
