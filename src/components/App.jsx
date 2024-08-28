@@ -1,19 +1,19 @@
 import { Router } from 'preact-router';
 import { useState, useEffect } from 'preact/hooks';
 import { useGlobal } from '/src/context/GlobalContext'; // Import useGlobal hook for accessing global variables
-import QuizMenu from './QuizMenu';
-import QuizList from './QuizList';
-import QuizForm from './QuizForm';
-import QuizPlay from './QuizPlay';
-import ChangeQuiz from './ChangeQuiz';
-import Login from './Login';
-import EditQuiz from './EditQuiz';
-import './App.css';
+import QuizMenu from './Hooks/QuizMenu';
+import QuizList from './Hooks/QuizList';
+import QuizForm from './Hooks/QuizForm';
+import QuizPlay from './Hooks/QuizPlay';
+import ChangeQuiz from './Hooks/ChangeQuiz';
+import Login from './Hooks/Login';
+import EditQuiz from './Hooks/EditQuiz';
+import './Styles/App.css';
 import { ref, onValue } from 'firebase/database';
-import { database } from '../firebase'; // Import Firebase database instance
-import { auth } from '../firebase'; // Import Firebase authentication
-import Footer from './Footer';
-import Header from './Header';
+import { database } from './DBcontroller/firebase'; // Import Firebase database instance
+import { auth } from './DBcontroller/firebase'; // Import Firebase authentication
+import Footer from './Hooks/Footer';
+import Header from './Hooks/Header';
 
 const App = () => {
   // State to store the list of quizzes fetched from the database
@@ -81,11 +81,11 @@ const App = () => {
       <Router>
         <Login path="/" onLogin={handleLogin} />
         <EditQuiz path="/edit" />
-        <QuizForm path="/create" quizzes={quizzes} setQuizzes={setQuizzes} />
+        <QuizForm path="/create" quizzes={quizzes} setQuizzes={setQuizzes} darkMode={darkMode}/>
         <QuizMenu path="/welcome" />
         <QuizList path="/main" quizzes={quizzes} />
-        <QuizPlay path="/quiz/:quizId" />
-        <ChangeQuiz path="/change-quiz/:quizId"/>
+        <QuizPlay path="/quiz/:quizId" darkMode={darkMode}/>
+        <ChangeQuiz path="/change-quiz/:quizId"  darkMode={darkMode}/>
       </Router>
       
       {/* Footer component */}

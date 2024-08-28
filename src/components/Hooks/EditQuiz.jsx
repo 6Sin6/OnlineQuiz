@@ -2,7 +2,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { useGlobal } from '/src/context/GlobalContext';
 import { route } from 'preact-router';
 import { ref, onValue, remove } from 'firebase/database';
-import { database } from '../firebase';
+import { database } from '../DBcontroller/firebase';
 
 const EditQuiz = () => {
   // State to hold the quizzes
@@ -91,13 +91,13 @@ const EditQuiz = () => {
               <p className="mb-2">{quiz.description}</p>
               <button
                 onClick={() => handleEdit(quiz.id)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl mt-2 transition duration-500 mr-2"
+               className="bg-blue-700 hover:bg-blue-900 text-white font-bold w-40 h-10 rounded-xl shadow-lg mb-4 transition duration-500 m-10"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(quiz.id)}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl mt-2 transition duration-500"
+               className="bg-blue-700 hover:bg-blue-900 text-white font-bold w-40 h-10 rounded-xl shadow-lg mb-4 transition duration-500 m-10"
               >
                 Delete
               </button>
@@ -109,7 +109,7 @@ const EditQuiz = () => {
       )}
       <button
         onClick={handleBackClick}
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+        className="bg-blue-600 hover:bg-blue-700 w-40 h-10 text-white font-bold py-2 px-4 rounded-xl mt-4"
       >
         Back
       </button>

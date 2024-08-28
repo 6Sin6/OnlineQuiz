@@ -1,5 +1,5 @@
 // File name: Login.jsx
-import { signInWithGoogle } from '/src/auth'; // Import function to handle Google sign-in
+import { signInWithGoogle } from '../DBcontroller/auth'; // Import function to handle Google sign-in
 import { route } from 'preact-router'; // Import routing function for navigation
 import { useGlobal } from '/src/context/GlobalContext'; // Import custom hook for global state management
 import { useState, useEffect } from 'preact/hooks'; // Import hooks for managing state and side effects
@@ -53,9 +53,9 @@ const Login = ({ profilePhoto }) => {
 
   // Render the login component UI
   return (
-    <div className="">
+    <div className="m-40">
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="text-5xl mb-8 shimmer">Login or Sign Up with Google</h1> {/* Main heading */}
+        <h1 className="text-5xl mb-8 shimmer">Online Quiz</h1> {/* Main heading */}
         <div className="flex flex-col items-center mb-6">
           <button
             onClick={handlePlayClick} // Navigate to play quizzes on click

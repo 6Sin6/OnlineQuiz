@@ -12,6 +12,7 @@ export function GlobalProvider({ children }) {
     GlobalVarUserEmail:"Guest",
     NophotoUrl:"https://th.bing.com/th/id/OIP.PRyT3WbMgUpQFp8uD_qudQAAAA?rs=1&pid=ImgDetMain",
     GlobalVarprofilePhotoUrl: "https://th.bing.com/th/id/OIP.PRyT3WbMgUpQFp8uD_qudQAAAA?rs=1&pid=ImgDetMain",
+   
   };
 });
   useEffect(() => {

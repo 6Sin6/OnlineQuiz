@@ -2,10 +2,10 @@ import { useState, useEffect } from 'preact/hooks';
 import { useGlobal } from '/src/context/GlobalContext'; // Import useGlobal hook for accessing global variables
 import { route } from 'preact-router'; // Import route for navigation
 import { ref, onValue } from 'firebase/database';
-import { database } from '../firebase'; // Import Firebase database instance
+import { database } from '../DBcontroller/firebase'; // Import Firebase database instance
 import QuizForm from './QuizForm'; // Import QuizForm component
 
-const ChangeQuiz = ({ quizId }) => {
+const ChangeQuiz = ({ quizId ,darkMode}) => {
   const { state } = useGlobal(); // Access global state variables
   const [quiz, setQuiz] = useState(null); // State to store the quiz data fetched from the database
 
@@ -40,7 +40,7 @@ const ChangeQuiz = ({ quizId }) => {
   return (
     <div>
       <h2>Edit Quiz</h2>
-      <QuizForm quizId={quizId} quizzes={quiz} setQuizzes={setQuiz} />
+      <QuizForm quizId={quizId} quizzes={quiz} setQuizzes={setQuiz} darkMode={darkMode} />
     </div>
   );
 };

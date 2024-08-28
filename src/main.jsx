@@ -2,7 +2,7 @@
 
 import { render } from 'preact';
 import App from './components/App'; // Import the main App component from app.jsx
-import './index.css'; // Import global CSS styles (Tailwind styles)
+import './components/styles/index.css'; // Import global CSS styles (Tailwind styles)
 import { GlobalProvider } from './context/GlobalContext'; // Import the context provider used for global varibles
 
 

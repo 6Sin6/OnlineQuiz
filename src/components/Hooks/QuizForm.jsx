@@ -2,10 +2,10 @@ import { useState, useEffect } from 'preact/hooks';
 import { useGlobal } from '/src/context/GlobalContext';
 import { route } from 'preact-router';
 import { ref, push, set,remove } from 'firebase/database';
-import { database } from '../firebase';
+import { database } from '../DBcontroller/firebase';
 
 // Main QuizForm Component
-const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
+const QuizForm = ({  quizId, quizzes, setQuizzes,darkMode }) => {
   const [quizTitle, setQuizTitle] = useState('');
   const [quizDescription, setQuizDescription] = useState('');
   const [questions, setQuestions] = useState([]);
@@ -203,26 +203,26 @@ const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
           ))}
         </div>
         <div className="mb-2 flex flex-col items-center">
-          <button
-            type="button"
-            onClick={addQuestion}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg mb-4 transition duration-500"
-          >
-            Add Question
-          </button>
-          <button
-            type="submit"
-            className="bg-green-400 hover:bg-green-500 text-white font-bold py-4 px-8 rounded-xl shadow-lg mb-4 transition duration-500"
-          >
-            Save Quiz
-          </button>
-          <button
-            type="button"
-            onClick={handleBackClick}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg"
-          >
-            Back
-          </button>
+        <button
+  type="button"
+  onClick={addQuestion}
+ className="bg-blue-700 hover:bg-blue-900 text-white font-bold w-48 h-16 rounded-xl shadow-lg mb-4 transition duration-500 opacity-75 flex items-center justify-center"
+>
+  Add Question
+</button>
+
+<button
+  type="submit"className="bg-blue-700 hover:bg-blue-900 text-white font-bold w-48 h-16 rounded-xl shadow-lg mb-4 transition duration-500 opacity-75 flex items-center justify-center">
+  Save Quiz
+</button>
+
+<button
+  type="button"
+  onClick={handleBackClick}
+  className="bg-blue-700 hover:bg-blue-900 text-white font-bold w-48 h-16 rounded-xl shadow-lg mb-4 transition duration-500 opacity-75 flex items-center justify-center">
+  Back
+</button>
+
         </div>
       </form>
 
@@ -231,8 +231,9 @@ const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
 
       {/* Modal for displaying messages */}
       {showModal.visible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg text-black shadow-lg">
+        <div className={`fixed inset-0 flex items-center justify-center ${darkMode ? 'bg-gray-900 bg-opacity-75' : 'bg-gray-300 bg-opacity-50'}`}>
+
+          <div className={`p-6 rounded-lg  shadow-lg  ${darkMode ? 'bg-gray-500 text-white' : 'bg-white text-black'}`}>
             <h2 className="text-xl font-bold mb-4">{showModal.type === 'confirm' ? 'Are you sure?' : showModal.title}</h2>
             <p className="mb-4">{showModal.message}</p>
             <div className="flex justify-between">
@@ -240,13 +241,14 @@ const QuizForm = ({  quizId, quizzes, setQuizzes }) => {
                 <>
                   <button
                     onClick={() => setShowModal({ visible: false, message: '', type: '' })}
-                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-                  >
+                     className={`p-6 rounded-lg  shadow-lg font-bold py-2 px-4 rounded ${darkMode ? 'bg-gray-600 text-white hover:bg-gray-700' : 'bg-gray-200 text-black hover:bg-gray-300'}`}>
+                
+                  
                     Cancel
                   </button>
                   <button
                     onClick={handleModalConfirm}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
                   >
                     Yes, Go Back
                   </button>

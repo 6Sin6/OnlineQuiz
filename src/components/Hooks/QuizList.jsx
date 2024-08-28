@@ -1,7 +1,7 @@
 import { route } from 'preact-router';
 import { useState, useEffect } from 'preact/hooks';
 import { ref, onValue } from 'firebase/database';
-import { database } from '../firebase'; // Import database from firebase.js
+import { database } from '../DBcontroller/firebase'; // Import database from firebase.js
 import { useGlobal } from '/src/context/GlobalContext'; // Import the global context
 
 const QuizList = ({ quizzes }) => {
@@ -109,12 +109,9 @@ const QuizList = ({ quizzes }) => {
       </div>
       <button
         onClick={handleBackClick} // Back button click
-        className={`font-bold py-4 px-8 rounded-lg shadow-lg mt-8 ${
-          isDarkMode
-            ? 'bg-red-600 hover:bg-red-800 text-white'
-            : 'bg-red-500 hover:bg-red-700 text-white'
-        }`}
+        className={`font-bold py-4 px-8 rounded-lg shadow-lg mt-8 bg-blue-700 hover:bg-blue-900 text-white `}
       >
+ 
         Back
       </button>
     </div>

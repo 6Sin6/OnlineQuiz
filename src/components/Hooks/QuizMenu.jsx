@@ -54,7 +54,7 @@ const QuizMenu = () => {
 
   return (
     <div ref={topRef} className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-5xl mb-10 shimmer">Welcome to the Online Quiz</h1>
+      <h1 className="text-5xl mb-10 shimmer">Online Quiz</h1>
       <div className="grid grid-cols-2 grid-rows-2 gap-5">
         <button
           onClick={handlePlayClick}//Redirect to the main page
